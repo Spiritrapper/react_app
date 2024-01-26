@@ -5,7 +5,7 @@ function App() {
   const [keyword, setKeyword] = useState("");
   const onClick = () => setValue((prev) => prev +1);
   const onChange = (event) => setKeyword(event.target.value);
- 
+  // 한번만 실행되고 마는 코드
   useEffect( () => { 
     console.log("i run only once") ;
   }, []);
