@@ -12,11 +12,9 @@ function App() {
     }
     // 버튼제출후 칸 비워주기 실행후 비우기
     setToDo("");
-    // ex) food= [1,2,3,4]
-    // [6, food] == [6, Array(4)] , [6,...food] == [6, 1, 2, 3, 4]
+    // toDo, ...currentArray 새로운 toDD 와 현재 저장된 toDo array
     setToDos((currentArray) => [toDo, ...currentArray])
-    // setToDos((["hello"]) => ["bye bye", ...["hello"]]);
-    //setToDos((["bye bye", "hello"]) => ["hello2", ...["bye bye"]]);
+    
     console.log(toDo);
 
   };
@@ -33,6 +31,14 @@ function App() {
       />
       <button >Add To Do</button>
       </form>
+      <hr />
+      {/* toDos.map() == array.map() 각각array 요소(item)에 새로 실행 또는 바꿔서 갱신 */}
+      {/*['there', 'are','you'].map((item)=> item.toUpperCase())
+        3) ['THERE', 'ARE', 'YOU']*/}
+        <ul>
+      {toDos.map((item, index) =>
+       <li key={index}>{item}</li>)} 
+      </ul>
     </div>
   );
 }
