@@ -1,44 +1,44 @@
 import {useState, useEffect} from "react";
 
 function App() {
-  const [toDo, setToDo] = useState("");
-  // array 
-  const [toDos, setToDos] = useState([])
-  const onChange = (event) => setToDo(event.target.value);
-  const onSubmit = (event) => {
-    event.preventDefault();
-    if(toDo === ""){
-      return;
-    }
-    // 버튼제출후 칸 비워주기 실행후 비우기
-    setToDo("");
-    // toDo, ...currentArray 새로운 toDD 와 현재 저장된 toDo array
-    setToDos((currentArray) => [toDo, ...currentArray])
-    
-    console.log(toDo);
-
-  };
-  console.log(toDos);
+  const [loading, setLoading] = useState(true);
+  // array 초기화 [] 설정
+  const [coins, setCoins] = useState([]);
+  const [money, setMoney] = useState(0);
+  const [result, setResult] = useState(0);
+  useEffect(() => {
+    fetch("https://api.coinpaprika.com/v1/tickers")
+    .then((response) => response.json())
+    .then((json) => {
+        setCoins(json);
+        setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+        })
+  }, []);
+  const inputHandle = (event) => setMoney(event.target.value);
+  const setChange = (event) => setResult(event.target.value);
   return (
     <div>
-      <h1>My To Do ({toDos.length})</h1>
-      <form onSubmit={onSubmit}>
-      <input
-        onChange={onChange}
-        value={toDo}
-        type="text"
-        placeholder="Write your to do..."
-      />
-      <button >Add To Do</button>
-      </form>
-      <hr />
-      {/* toDos.map() == array.map() 각각array 요소(item)에 새로 실행 또는 바꿔서 갱신 */}
-      {/*['there', 'are','you'].map((item)=> item.toUpperCase())
-        3) ['THERE', 'ARE', 'YOU']*/}
-        <ul>
-      {toDos.map((item, index) =>
-       <li key={index}>{item}</li>)} 
-      </ul>
+      <h1>The Coins!{loading ? "" : `(${coins.length})`}</h1>
+      <input onChange={inputHandle} value={money} placeholder="Type money" />
+      <br></br>
+      {loading  ? <strong>Loading...</strong>:  
+      
+      <select onChange={setChange}>
+      <option value="0"> Select your coin!</option>      
+      {coins.map((coin, index) => (
+        <option key={index} value={coin.quotes.USD.price}>
+      <li key={coin.id}>
+        {coin.name} ({coin.symbol}) : {coin.quotes.USD.price} USD</li>
+        </option>
+        ))}        
+      </select>}
+     <div>
+     <h2>You can get {result == 0 ? "0" : money / result} coins</h2>
+     </div>
     </div>
   );
 }
